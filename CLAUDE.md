@@ -100,6 +100,7 @@ Build configurations: Debug, Beta, Alpha, Pre, Release (XCConfig files in `Confi
 ## Development Notes
 
 - **Never create PRs to upstream (CodeEditApp/CodeEdit) without explicit approval. Always target the fork (ahmadyan/CodeEdit) by default.**
+- **Do not add Claude Code signatures or Co-Authored-By lines to commits or PRs.**
 - Currently not accepting localization PRs (team preparing for future support)
 - Project uses self-hosted macOS runners for CI builds
 - Discord community has weekly meetups Saturdays at 3pm UTC
