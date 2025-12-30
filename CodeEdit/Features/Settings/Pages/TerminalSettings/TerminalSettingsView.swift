@@ -33,6 +33,11 @@ struct TerminalSettingsView: View {
                 injectionOptions
                 useLoginShell
             }
+            Section {
+                useGhosttyToggle
+            } header: {
+                Text("Experimental")
+            }
         }
     }
 }
@@ -114,6 +119,16 @@ private extension TerminalSettingsView {
                 .help("Whether or not to use a login shell when starting a terminal session. By default, a login shell is used used similar to Terminal.app.")
         } else {
             EmptyView()
+        }
+    }
+
+    @ViewBuilder private var useGhosttyToggle: some View {
+        VStack(alignment: .leading) {
+            Toggle("Use Ghostty Backend", isOn: $settings.useGhostty)
+                .help("Use the Ghostty terminal backend for GPU-accelerated rendering via Metal.")
+            Text("Enables GPU-accelerated terminal rendering. Requires restart.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 }

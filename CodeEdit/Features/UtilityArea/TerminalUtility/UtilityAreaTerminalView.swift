@@ -21,6 +21,8 @@ struct UtilityAreaTerminalView: View {
     private var terminalFont
     @AppSettings(\.terminal.useTextEditorFont)
     private var useTextEditorFont
+    @AppSettings(\.terminal.useGhostty)
+    private var useGhostty
 
     @Environment(\.colorScheme)
     private var colorScheme
@@ -103,21 +105,10 @@ struct UtilityAreaTerminalView: View {
                         )
                         VStack(spacing: 0) {
                             Spacer(minLength: 0).frame(minHeight: 0)
-                            TerminalEmulatorView(
-                                url: selectedTerminal.url,
-                                terminalID: selectedTerminal.id,
-                                shellType: selectedTerminal.shell,
-                                onTitleChange: { [weak selectedTerminal] newTitle in
-                                    guard let id = selectedTerminal?.id else { return }
-                                    // This can be called whenever, even in a view update so it needs to be dispatched.
-                                    DispatchQueue.main.async { [weak utilityAreaViewModel] in
-                                        utilityAreaViewModel?.updateTerminal(id, title: newTitle)
-                                    }
-                                }
-                            )
-                            .frame(height: max(0, constrainedHeight - 1))
-                            .id(selectedTerminal.id)
-                            .accessibilityIdentifier("terminal")
+                            terminalView(for: selectedTerminal)
+                                .frame(height: max(0, constrainedHeight - 1))
+                                .id(selectedTerminal.id)
+                                .accessibilityIdentifier("terminal")
                         }
                     }
                 } else {
@@ -182,6 +173,35 @@ struct UtilityAreaTerminalView: View {
             } else {
                 EffectView(.contentBackground)
             }
+        }
+    }
+
+    /// Creates the appropriate terminal view based on the useGhostty setting.
+    @ViewBuilder
+    private func terminalView(for terminal: UtilityAreaTerminal) -> some View {
+        if useGhostty {
+            GhosttyTerminalView(
+                url: terminal.url,
+                terminalID: terminal.id,
+                onTitleChange: { [weak terminal] newTitle in
+                    guard let id = terminal?.id else { return }
+                    DispatchQueue.main.async { [weak utilityAreaViewModel] in
+                        utilityAreaViewModel?.updateTerminal(id, title: newTitle)
+                    }
+                }
+            )
+        } else {
+            TerminalEmulatorView(
+                url: terminal.url,
+                terminalID: terminal.id,
+                shellType: terminal.shell,
+                onTitleChange: { [weak terminal] newTitle in
+                    guard let id = terminal?.id else { return }
+                    DispatchQueue.main.async { [weak utilityAreaViewModel] in
+                        utilityAreaViewModel?.updateTerminal(id, title: newTitle)
+                    }
+                }
+            )
         }
     }
 }
