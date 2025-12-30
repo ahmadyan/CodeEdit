@@ -22,7 +22,8 @@ extension SettingsData {
                 "Font",
                 "Font Size",
                 "Terminal Cursor Style",
-                "Blink Cursor"
+                "Blink Cursor",
+                "Use Ghostty Backend"
             ]
             .map { NSLocalizedString($0, comment: "") }
         }
@@ -60,6 +61,10 @@ extension SettingsData {
         /// If `true`, use a login shell.
         var useLoginShell: Bool = true
 
+        /// If `true`, use the Ghostty terminal backend (GPU-accelerated via Metal).
+        /// This is experimental and requires GhosttyKit framework.
+        var useGhostty: Bool = false
+
         /// Default initializer
         init() {}
 
@@ -78,6 +83,7 @@ extension SettingsData {
             self.useTextEditorFont = try container.decodeIfPresent(Bool.self, forKey: .useTextEditorFont) ?? true
             self.useShellIntegration = try container.decodeIfPresent(Bool.self, forKey: .useShellIntegration) ?? true
             self.useLoginShell = try container.decodeIfPresent(Bool.self, forKey: .useLoginShell) ?? true
+            self.useGhostty = try container.decodeIfPresent(Bool.self, forKey: .useGhostty) ?? false
         }
     }
 

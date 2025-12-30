@@ -97,3 +97,7 @@ iOSInjectionProject/
 .idea
 .vscode
 .claude/
+
+# GhosttyKit binary - too large for GitHub, must be built/obtained separately
+# See scripts/setup-ghostty.sh or CodeEdit/Frameworks/GhosttyKit.xcframework/README.md
+CodeEdit/Frameworks/GhosttyKit.xcframework/macos-arm64/libghostty-fat.a
